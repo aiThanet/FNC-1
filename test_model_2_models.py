@@ -3,9 +3,9 @@ import numpy as np
 
 from sklearn.ensemble import GradientBoostingClassifier
 from feature_engineering import refuting_features, polarity_features, hand_features, sentiment_analyzer, gen_or_load_feats
-from feature_engineering import word_overlap_features
+from feature_engineering import word_overlap_features, name_entity_similarity
 from utils.dataset import DataSet
-from utils.generate_test_splits_bi import kfold_split, get_stances_for_folds
+from utils.generate_test_splits import kfold_split, get_stances_for_folds
 from utils.score import report_score, report_score_biClass, LABELS, LABELS_RELATED, score_submission, score_submission_biClass
 from utils.system import parse_params, check_version
 
@@ -27,6 +27,7 @@ def generate_features(stances,dataset,name,only_related=False):
     X_polarity = gen_or_load_feats(polarity_features, h, b, "features/" + related_dir + "polarity."+name+".npy")
     X_sentiment = gen_or_load_feats(sentiment_analyzer, h, b, "features/" + related_dir + "sentiment."+name+".npy")
     X_hand = gen_or_load_feats(hand_features, h, b, "features/" + related_dir + "hand."+name+".npy")
+    X_ner = gen_or_load_feats(name_entity_similarity, h, b, "features/ner."+name+".npy")
 
     X = np.c_[X_hand, X_sentiment, X_polarity, X_refuting, X_overlap]
     return X,y,y_bi
@@ -123,7 +124,9 @@ def get_feature_name():
     sentiment_body_feature_name = ['bd_' + i for i in sentiment_list]
     sentiment_feature_name = sentiment_headline_feature_name + sentiment_body_feature_name
 
-    name_features = hand_feature_name + sentiment_feature_name + polarity_feature_name + refuting_feature_name + ['overlap']
+    ner_feature_name = ['sim_person','diff_person','sim_location','diff_location','sim_organization','diff_organization']
+    
+    name_features = hand_feature_name + sentiment_feature_name + polarity_feature_name + refuting_feature_name + ['overlap'] + ner_feature_name
     
     
     return name_features
@@ -176,13 +179,11 @@ if __name__ == "__main__":
     related_fold_stances, related_hold_out_stances = get_stances_for_folds(d,related_folds,related_hold_out,only_related=True)
     related_best_fold = generate_k_fold_model(related_fold_stances,step=2)
 
-    
     #Run on Holdout set and report the final score on the holdout set
     evaluate_model(best_fold,related_best_fold,X_holdout,y_holdout,y_holdout_bi)
 
     #Run on competition dataset
     evaluate_model(best_fold,related_best_fold,X_competition,y_competition,y_competition_bi)
-
 
     # plot feature importance
     name_features = get_feature_name()

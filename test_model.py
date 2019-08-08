@@ -3,7 +3,7 @@ import numpy as np
 
 from sklearn.ensemble import GradientBoostingClassifier
 from feature_engineering import refuting_features, polarity_features, hand_features, sentiment_analyzer, gen_or_load_feats
-from feature_engineering import word_overlap_features
+from feature_engineering import word_overlap_features, name_entity_similarity
 from utils.dataset import DataSet
 from utils.generate_test_splits import kfold_split, get_stances_for_folds
 from utils.score import report_score, LABELS, score_submission
@@ -25,8 +25,8 @@ def generate_features(stances,dataset,name):
     X_polarity = gen_or_load_feats(polarity_features, h, b, "features/polarity."+name+".npy")
     X_sentiment = gen_or_load_feats(sentiment_analyzer, h, b, "features/sentiment."+name+".npy")
     X_hand = gen_or_load_feats(hand_features, h, b, "features/hand."+name+".npy")
-
-    X = np.c_[X_hand, X_sentiment, X_polarity, X_refuting, X_overlap]
+    X_ner = gen_or_load_feats(name_entity_similarity, h, b, "features/ner."+name+".npy")
+    X = np.c_[X_hand, X_sentiment, X_polarity, X_refuting, X_overlap, X_ner]
     return X,y
 
 
@@ -148,6 +148,9 @@ if __name__ == "__main__":
     sentiment_body_feature_name = ['bd_' + i for i in sentiment_list]
     sentiment_feature_name = sentiment_headline_feature_name + sentiment_body_feature_name
 
-    name_features = hand_feature_name + sentiment_feature_name + polarity_feature_name + refuting_feature_name + ['overlap']
+    # ner_feature_name = ['sim_person','diff_person','sim_location','diff_location','sim_organization','diff_organization']
+    ner_feature_name = ['sim_person','sim_location','sim_organization']
+    
+    name_features = hand_feature_name + sentiment_feature_name + polarity_feature_name + refuting_feature_name + ['overlap'] + ner_feature_name
     
     plot_feature_importance(best_fold.feature_importances_,name_features,show=True)

@@ -1,11 +1,12 @@
 import os
 import re
 import nltk
+import json
 import numpy as np
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from sklearn import feature_extraction
 from tqdm import tqdm
-
+from stanfordcorenlp import StanfordCoreNLP
 
 _wnl = nltk.WordNetLemmatizer()
 
@@ -18,10 +19,13 @@ def get_tokenized_lemmas(s):
     return [normalize_word(t) for t in nltk.word_tokenize(s)]
 
 
-def clean(s):
+def clean(s,lower=True):
     # Cleans a string: Lowercasing, trimming, removing non-alphanumeric
+    if lower:
+        return " ".join(re.findall(r'\w+', s, flags=re.UNICODE)).lower()
+    else :
+        return " ".join(re.findall(r'\w+', s, flags=re.UNICODE))
 
-    return " ".join(re.findall(r'\w+', s, flags=re.UNICODE)).lower()
 
 
 def remove_stopwords(l):
@@ -224,3 +228,59 @@ def sentiment_analyzer(headlines, bodies):
         X.append(headline_sentiment_feature + body_sentiment_feature)
     return X
 
+def name_entity_similarity(headlines, bodies):
+    print("Generating Name Entity Similarity Feature...")
+    CORENLP_props = {'annotators': 'ner', 'pipelineLanguage': 'en', 'outputFormat': 'json', 'ner.applyFineGrained': 'false'}
+    nlp = StanfordCoreNLP('http://localhost', port=9000)
+    
+    X = []
+    for i, (headline, body) in tqdm(enumerate(zip(headlines, bodies))):
+        clean_headline = clean(headline,lower=False)
+        clean_body = clean(body,lower=False)
+
+        hl_entities_person = set()
+        hl_entities_location = set()
+        hl_entities_organization = set()
+        body_entity_person = set()
+        body_entity_location = set()
+        body_entity_organization = set()
+        hl_entity = json.loads(nlp.annotate(clean_headline, properties=CORENLP_props))
+        body_entity = json.loads(nlp.annotate(clean_body, properties=CORENLP_props))
+        for sentence in hl_entity['sentences']:
+            for entity in sentence['entitymentions']:
+                if entity['ner'] == 'PERSON':
+                    hl_entities_person.add(entity['text'].lower())
+                elif entity['ner'] == 'LOCATION':
+                    hl_entities_location.add(entity['text'].lower())
+                elif entity['ner'] == 'ORGANIZATION':
+                    hl_entities_organization.add(entity['text'].lower())
+        for sentence in body_entity['sentences']:
+            for entity in sentence['entitymentions']:
+                if entity['ner'] == 'PERSON':
+                    body_entity_person.add(entity['text'].lower())
+                elif entity['ner'] == 'LOCATION':
+                    body_entity_location.add(entity['text'].lower())
+                elif entity['ner'] == 'ORGANIZATION':
+                    body_entity_organization.add(entity['text'].lower())
+        try:
+            sim_person_feature = len(hl_entities_person.intersection(body_entity_person)) / float(len(hl_entities_person.union(body_entity_person)))
+            diff_person_feature = 1 - sim_person_feature
+        except ZeroDivisionError:
+            sim_person_feature = 0
+            diff_person_feature = 0
+        try:
+            sim_location_feature = len(hl_entities_location.intersection(body_entity_location)) / float(len(hl_entities_location.union(body_entity_location)))
+            diff_location_feature = 1 - sim_location_feature
+        except ZeroDivisionError:
+            sim_location_feature = 0
+            diff_location_feature = 0
+        try:
+            sim_organization_feature = len(hl_entities_organization.intersection(body_entity_organization)) / float(len(hl_entities_organization.union(body_entity_organization)))
+            diff_organization_feature = 1 - sim_organization_feature
+        except ZeroDivisionError:
+            sim_organization_feature = 0
+            diff_organization_feature = 0
+        # X.append([sim_person_feature,diff_person_feature,sim_location_feature,diff_location_feature,sim_organization_feature,diff_organization_feature])
+        X.append([sim_person_feature,sim_location_feature,sim_organization_feature])
+
+    return X

@@ -3,4 +3,4 @@ sklearn
 numpy
 scipy
 nltk
-stanfordnlp
+stanfordcorenlp
