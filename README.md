@@ -38,7 +38,19 @@ Score: 8940.75 out of 11651.25 (76.73640167364017%)
 
         pip install -r requirements.txt --upgrade
 
-2.  In order to reproduce the same results
+2.  All features have been generated, if you want to reproduce it delete all file in features directory.
+
+3.  Parts of the Natural Language Toolkit (NLTK) might need to be installed manually.
+
+        python3 -c "import nltk; nltk.download('stopwords'); nltk.download('punkt'); nltk.download('wordnet')"
+
+4.  To generate name entity feature, you need to run CoreNLP server version 3.9.2: Download [Stanford CoreNLP](https://stanfordnlp.github.io/CoreNLP/history.html), extract anywhere and execute following command in corenlp directory:
+
+        java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9020
+
+5.  To run and generate the model (if features does not exist, automatically generate and save in features directory).
+
+        python3 test_model.py
 
 ## References
 
