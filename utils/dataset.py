@@ -16,6 +16,8 @@ class DataSet():
         #make the body ID an integer value
         for s in self.stances:
             s['Body ID'] = int(s['Body ID'])
+            s['Stance_biClass'] = 0 if s['Stance'] == 'unrelated' else 1
+
 
         #copy all bodies into a dictionary
         for article in articles:
