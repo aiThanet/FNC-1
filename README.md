@@ -1,6 +1,6 @@
 # FNC-1 COMP9417 project
 
-Fake New Challenge : [FakeChallenge.org](http://fakenewschallenge.org).
+Fake New Challenge : [FakeNewsChallenge.org](http://fakenewschallenge.org).
 
 this project start from baseline that provided by the orgainzatio can be found on [github](https://github.com/FakeNewsChallenge/fnc-1-baseline).
 
@@ -30,7 +30,7 @@ Score: 8940.75 out of 11651.25 (76.73640167364017%)
 
 ## Requirements
 
-    	python >= 3.7.0 (tested with 3.7.2)
+        python >= 3.7.0 (tested with 3.7.2)
 
 ## Installation
 
@@ -38,7 +38,7 @@ Score: 8940.75 out of 11651.25 (76.73640167364017%)
 
         pip install -r requirements.txt --upgrade
 
-2.  All features have been generated, if you want to reproduce it delete all file in features directory.
+2.  All features have been generated. If you want to reproduce it, delete all files in features directory.
 
 3.  Parts of the Natural Language Toolkit (NLTK) might need to be installed manually.
 
@@ -54,6 +54,8 @@ Score: 8940.75 out of 11651.25 (76.73640167364017%)
 
 ## References
 
+- [FakeNewsChallenge.org](http://fakenewschallenge.org).
+- [FNC-1 Baseline](https://github.com/FakeNewsChallenge/fnc-1-baseline).
 - [Sentiment Analysis](http://www.nltk.org/howto/sentiment.html).
 - [CoreNLP Server](https://stanfordnlp.github.io/CoreNLP/index.html).
-- [https://github.com/Lynten/stanford-corenlp](https://github.com/Lynten/stanford-corenlp).
+- [stanford-corenlp](https://github.com/Lynten/stanford-corenlp).
