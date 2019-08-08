@@ -148,8 +148,8 @@ if __name__ == "__main__":
     sentiment_body_feature_name = ['bd_' + i for i in sentiment_list]
     sentiment_feature_name = sentiment_headline_feature_name + sentiment_body_feature_name
 
-    # ner_feature_name = ['sim_person','diff_person','sim_location','diff_location','sim_organization','diff_organization']
-    ner_feature_name = ['sim_person','sim_location','sim_organization']
+    ner_feature_name = ['sim_person','diff_person','sim_location','diff_location','sim_organization','diff_organization']
+    # ner_feature_name = ['sim_person','sim_location','sim_organization']
     
     name_features = hand_feature_name + sentiment_feature_name + polarity_feature_name + refuting_feature_name + ['overlap'] + ner_feature_name
     

@@ -55,4 +55,5 @@ Score: 8940.75 out of 11651.25 (76.73640167364017%)
 ## References
 
 - [Sentiment Analysis](http://www.nltk.org/howto/sentiment.html).
+- [CoreNLP Server](https://stanfordnlp.github.io/CoreNLP/index.html).
 - [https://github.com/Lynten/stanford-corenlp](https://github.com/Lynten/stanford-corenlp).

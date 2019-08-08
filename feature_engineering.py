@@ -280,7 +280,6 @@ def name_entity_similarity(headlines, bodies):
         except ZeroDivisionError:
             sim_organization_feature = 0
             diff_organization_feature = 0
-        # X.append([sim_person_feature,diff_person_feature,sim_location_feature,diff_location_feature,sim_organization_feature,diff_organization_feature])
-        X.append([sim_person_feature,sim_location_feature,sim_organization_feature])
+        X.append([sim_person_feature,diff_person_feature,sim_location_feature,diff_location_feature,sim_organization_feature,diff_organization_feature])
 
     return X
