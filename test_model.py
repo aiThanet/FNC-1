@@ -150,4 +150,4 @@ if __name__ == "__main__":
 
     name_features = hand_feature_name + sentiment_feature_name + polarity_feature_name + refuting_feature_name + ['overlap']
     
-    plot_feature_importance(importances,name_features,show=True)
+    plot_feature_importance(best_fold.feature_importances_,name_features,show=True)
