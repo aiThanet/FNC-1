@@ -44,7 +44,7 @@ def plot_feature_importance(importances,feature_name, show=False):
     if(show):
         idx = 0
         for _name in sorted_feature_names:
-            print(idx + "\t" + _name + "\t"+importances[indices[idx]])
+            print(str(idx) + "\t" + _name + "\t", importances[indices[idx]])
             idx = idx+1
 
 if __name__ == "__main__":

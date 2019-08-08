@@ -7,3 +7,10 @@ this project start from baseline that provided by the orgainzatio can be found o
 ## ref
 
 - [Sentiment Analysis](http://www.nltk.org/howto/sentiment.html).
+
+## install standfordnlp
+
+```
+>>> import stanfordnlp
+>>> stanfordnlp.download('en')
+```

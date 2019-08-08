@@ -57,16 +57,16 @@ def kfold_split(dataset, training = 0.8, n_folds = 10, base_dir="splits",biClass
     return folds,hold_out_ids
 
 
-def get_stances_for_folds(dataset,folds,hold_out):
+def get_stances_for_folds(dataset,folds,hold_out,only_related = False):
     stances_folds = defaultdict(list)
     stances_hold_out = []
     for stance in dataset.stances:
-        if stance['Body ID'] in hold_out:
+        if stance['Body ID'] in hold_out and ((only_related and stance['Stance_biClass'] == 1) or (not only_related)):
             stances_hold_out.append(stance)
         else:
             fold_id = 0
             for fold in folds:
-                if stance['Body ID'] in fold:
+                if stance['Body ID'] in fold and ((only_related and stance['Stance_biClass'] == 1) or (not only_related)):
                     stances_folds[fold_id].append(stance)
                 fold_id += 1
 
