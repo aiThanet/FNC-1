@@ -2,6 +2,7 @@ import os
 import re
 import nltk
 import numpy as np
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from sklearn import feature_extraction
 from tqdm import tqdm
 
@@ -189,8 +190,8 @@ def hand_features(headlines, bodies):
         clean_headline = clean(headline)
         features = []
         features = append_chargrams(features, clean_headline, clean_body, 2)
-        features = append_chargrams(features, clean_headline, clean_body, 8)
         features = append_chargrams(features, clean_headline, clean_body, 4)
+        features = append_chargrams(features, clean_headline, clean_body, 8)
         features = append_chargrams(features, clean_headline, clean_body, 16)
         features = append_ngrams(features, clean_headline, clean_body, 2)
         features = append_ngrams(features, clean_headline, clean_body, 3)
@@ -207,3 +208,19 @@ def hand_features(headlines, bodies):
 
 
     return X
+
+def sentiment_analyzer(headlines, bodies):
+    print("Generating Sentiment Feature...")
+    sid = SentimentIntensityAnalyzer()
+    sentiment_list = ['compound','neg','neu','pos']
+    X = []
+    for i, (headline, body) in tqdm(enumerate(zip(headlines, bodies))):
+        clean_headline = clean(headline)
+        clean_body = clean(body)
+        ss = sid.polarity_scores(clean_headline)
+        headline_sentiment_feature = [ss[l] for l in sentiment_list]
+        ss = sid.polarity_scores(clean_body)
+        body_sentiment_feature = [ss[l] for l in sentiment_list]
+        X.append(headline_sentiment_feature + body_sentiment_feature)
+    return X
+
