@@ -34,15 +34,18 @@ def generate_features(stances,dataset,name,only_related=False):
     return X,y,y_bi
 
 
-def plot_feature_importance(importances,feature_name, show=False):
+def plot_feature_importance(importances,feature_name, max_feature=30,show=False):
     
     indices = np.argsort(importances)[::-1]
     sorted_feature_names = [feature_name[i] for i in indices]
 
+    sorted_feature_names = sorted_feature_names[:max_feature]
+    indices = indices[:max_feature]
+
     plt.figure()
     plt.title("Feature Importance")
-    plt.bar(range(len(feature_name)), importances[indices])
-    plt.xticks(range(len(name_features)), sorted_feature_names, rotation=90)
+    plt.bar(range(max_feature), importances[indices])
+    plt.xticks(range(max_feature), sorted_feature_names, rotation=90)
     plt.show()
 
     if(show):
@@ -187,5 +190,5 @@ if __name__ == "__main__":
 
     # plot feature importance
     name_features = get_feature_name()
-    plot_feature_importance(best_fold.feature_importances_,name_features,show=True)
-    plot_feature_importance(related_best_fold.feature_importances_,name_features,show=True)
+    plot_feature_importance(best_fold.feature_importances_,name_features,max_feature=10,show=True)
+    plot_feature_importance(related_best_fold.feature_importances_,name_features,max_feature=10,show=True)
