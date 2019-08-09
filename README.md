@@ -2,7 +2,7 @@
 
 Fake New Challenge : [FakeNewsChallenge.org](http://fakenewschallenge.org).
 
-this project start from baseline that provided by the orgainzatio can be found on [github](https://github.com/FakeNewsChallenge/fnc-1-baseline).
+This project start from provided baseline on [github](https://github.com/FakeNewsChallenge/fnc-1-baseline).
 
 ## Requirements
 
