@@ -8,6 +8,8 @@ from nltk.tokenize import sent_tokenize
 from sklearn import feature_extraction
 from tqdm import tqdm
 from stanfordcorenlp import StanfordCoreNLP
+from doc2vecModelGenerator import doc2vecModelGenerator, preprocessing
+from gensim.models.doc2vec import Doc2Vec
 
 _wnl = nltk.WordNetLemmatizer()
 
@@ -296,3 +298,17 @@ def question_mark_ending(headlines, bodies):
 
     return X
 
+def doc2vec_feature(headlines, bodies):
+    print("Generating Doc2Vec Feature...")
+    if not (os.path.isfile("models/h_d2v.model") and  os.path.isfile("models/b_d2v.model")):
+        doc2vecModelGenerator()
+    h_model= Doc2Vec.load("models/h_d2v.model")
+    b_model= Doc2Vec.load("models/b_d2v.model")
+    X = []
+    for i, (headline, body) in tqdm(enumerate(zip(headlines, bodies))):
+        headline = preprocessing(headline,join=False)
+        body = preprocessing(body,join=False)
+        h_feature = list(h_model.infer_vector(headline))
+        b_feature = list(b_model.infer_vector(body))
+        X.append(h_feature + b_feature)
+    return X

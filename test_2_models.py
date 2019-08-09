@@ -3,7 +3,7 @@ import numpy as np
 
 from sklearn.ensemble import GradientBoostingClassifier
 from feature_engineering import refuting_features, polarity_features, hand_features, sentiment_analyzer, gen_or_load_feats
-from feature_engineering import word_overlap_features, name_entity_similarity, question_mark_ending
+from feature_engineering import word_overlap_features, name_entity_similarity, question_mark_ending, doc2vec_feature
 from utils.dataset import DataSet
 from utils.generate_test_splits import kfold_split, get_stances_for_folds
 from utils.score import report_score, report_score_biClass, LABELS, LABELS_RELATED, score_submission, score_submission_biClass
@@ -29,8 +29,9 @@ def generate_features(stances,dataset,name,only_related=False):
     X_hand = gen_or_load_feats(hand_features, h, b, "features/" + related_dir + "hand."+name+".npy")
     X_ner = gen_or_load_feats(name_entity_similarity, h, b, "features/" + related_dir + "ner."+name+".npy")
     X_Q = gen_or_load_feats(name_entity_similarity, h, b, "features/" + related_dir + "Q."+name+".npy")
+    X_doc2vec = gen_or_load_feats(doc2vec_feature, h, b, "features/" + related_dir + "doc2vec."+name+".npy")
 
-    X = np.c_[X_hand, X_sentiment, X_polarity, X_refuting, X_overlap, X_ner, X_Q]
+    X = np.c_[X_hand, X_sentiment, X_polarity, X_refuting, X_overlap, X_ner, X_Q, X_doc2vec]
     return X,y,y_bi
 
 
@@ -129,8 +130,8 @@ def get_feature_name():
     sentiment_feature_name = sentiment_headline_feature_name + sentiment_body_feature_name
 
     ner_feature_name = ['sim_person','diff_person','sim_location','diff_location','sim_organization','diff_organization']
-    
-    name_features = hand_feature_name + sentiment_feature_name + polarity_feature_name + refuting_feature_name + ['overlap'] + ner_feature_name + ['?']
+    doc_2_vec_feature_name = ['H_d2v_' + str(i) for i in range(5)] + ['B_d2v_' + str(i) for i in range(20)]
+    name_features = hand_feature_name + sentiment_feature_name + polarity_feature_name + refuting_feature_name + ['overlap'] + ner_feature_name + ['?'] + doc_2_vec_feature_name
     
     
     return name_features
@@ -190,5 +191,5 @@ if __name__ == "__main__":
 
     # plot feature importance
     name_features = get_feature_name()
-    plot_feature_importance(best_fold.feature_importances_,name_features,max_feature=10,show=True)
-    plot_feature_importance(related_best_fold.feature_importances_,name_features,max_feature=10,show=True)
+    plot_feature_importance(best_fold.feature_importances_,name_features,max_feature=50,show=True)
+    plot_feature_importance(related_best_fold.feature_importances_,name_features,max_feature=50,show=True)
