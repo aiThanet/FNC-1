@@ -151,7 +151,6 @@ def evaluate_model(best_fold,related_best_fold,X_holdout,y_holdout,y_holdout_bi)
     predicted = [LABELS[int(a)] for a in related_best_fold.predict(related_X_holdout)] + ["unrelated"] * un_count
     actual = related_actual + unrelated_actual
 
-    print("Scores on the dev set")
     report_score(actual,predicted)
     print("")
     print("")
