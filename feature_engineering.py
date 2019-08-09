@@ -4,6 +4,7 @@ import nltk
 import json
 import numpy as np
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from nltk.tokenize import sent_tokenize
 from sklearn import feature_extraction
 from tqdm import tqdm
 from stanfordcorenlp import StanfordCoreNLP
@@ -283,3 +284,15 @@ def name_entity_similarity(headlines, bodies):
         X.append([sim_person_feature,diff_person_feature,sim_location_feature,diff_location_feature,sim_organization_feature,diff_organization_feature])
 
     return X
+
+
+def question_mark_ending(headlines, bodies):
+    print("Generating Question Mark Feature...")
+
+    X = []
+    for i, (headline, body) in tqdm(enumerate(zip(headlines, bodies))):
+        feature = [1 if headline[-1] == '?' else 0]
+        X.append(feature)
+
+    return X
+
