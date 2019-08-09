@@ -27,7 +27,7 @@ def generate_features(stances,dataset,name,only_related=False):
     X_polarity = gen_or_load_feats(polarity_features, h, b, "features/" + related_dir + "polarity."+name+".npy")
     X_sentiment = gen_or_load_feats(sentiment_analyzer, h, b, "features/" + related_dir + "sentiment."+name+".npy")
     X_hand = gen_or_load_feats(hand_features, h, b, "features/" + related_dir + "hand."+name+".npy")
-    X_ner = gen_or_load_feats(name_entity_similarity, h, b, "features/ner."+name+".npy")
+    X_ner = gen_or_load_feats(name_entity_similarity, h, b, "features/" + related_dir + "ner."+name+".npy")
 
     X = np.c_[X_hand, X_sentiment, X_polarity, X_refuting, X_overlap]
     return X,y,y_bi
