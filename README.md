@@ -24,7 +24,7 @@ This project start from provided baseline on [github](https://github.com/FakeNew
 
         java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9020
 
-5.  To generate doc2vec feature, you need 2 paragraph vector models in models directory name h_d2v.model and b_d2v.model. You can generate from doc2vecModelGenerator.py or download them from[model.zip](https://drive.google.com/drive/folders/1dUrKZuVctHLy1PBvCRV3pZPbE5iFZL7i?usp=sharing).
+5.  To generate doc2vec feature, you need 2 paragraph vector models in models directory name h_d2v.model and b_d2v.model. You can generate from doc2vecModelGenerator.py or download `models.zip` from [drive](https://drive.google.com/drive/folders/1dUrKZuVctHLy1PBvCRV3pZPbE5iFZL7i?usp=sharing).
 
 6.  To run and generate the model (if features does not exist, automatically generate and save in features directory).
 
