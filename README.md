@@ -18,7 +18,7 @@ This project start from provided baseline on [github](https://github.com/FakeNew
 
         python3 -c "import nltk; nltk.download('stopwords'); nltk.download('punkt'); nltk.download('wordnet')"
 
-3.  All features have been generated. If you want to reproduce it, delete all files in features directory. Keep the features, you can skip to 6.
+3.  In order to reproduce the same results, please use our features and models. The features and models have been generated. If you want to reproduce it, delete all files in `features` and `models` directory. Keep them, you can skip to 6.
 
 4.  To generate name entity feature, you need to run CoreNLP server version 3.9.2: Download [Stanford CoreNLP](https://stanfordnlp.github.io/CoreNLP/history.html), extract anywhere and execute following command in corenlp directory (It takes about 5 hours on dev enviroment to generate):
 
@@ -26,13 +26,11 @@ This project start from provided baseline on [github](https://github.com/FakeNew
 
 5.  To generate doc2vec feature, you need 2 paragraph vector models in models directory name `h_d2v.model` and `b_d2v.model`. You can generate from doc2vecModelGenerator.py or use the one we've already generated.
 
-6.  In order to reproduce the same results, please use our features and download the models from [model.zip]() and unzip them into `models` directory.
-
-7.  To run and generate the model (if features does not exist, automatically generate and save in features directory).
+6.  To run and generate the model (if features or models do not exist, the script will generate them automatically).
 
         python3 FinalClassifier.py
 
-8.  `XGBoostClassifier.py` is the old version of project which classify 4 classes by only a XGBoost model.
+7.  `XGBoostClassifier.py` is the old version of project which classify 4 classes by only a XGBoost model.
 
 ## References
 
