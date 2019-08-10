@@ -160,7 +160,7 @@ def evaluate_model(best_fold,related_best_fold,X_holdout,y_holdout,y_holdout_bi)
     print("")
     print("")
 
-def generate_model(fold_stance,step):
+def generate_model(fold_stances,step):
     best_fold = generate_k_fold_model(fold_stances,step=step)
     joblib.dump(best_fold, "models/finalClassifier." + str(step) + ".model")
 
@@ -189,7 +189,7 @@ if __name__ == "__main__":
     related_folds, related_hold_out = kfold_split(d,n_folds=10,biClass=True)
     related_fold_stances, related_hold_out_stances = get_stances_for_folds(d,related_folds,related_hold_out,only_related=True)
     if not os.path.isfile("models/finalClassifier.2.model"):
-        generate_model(fold_stances,2)
+        generate_model(related_fold_stances,2)
     related_best_fold = joblib.load("models/finalClassifier.2.model")
 
     #Run on Holdout set and report the final score on the holdout set
