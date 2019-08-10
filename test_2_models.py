@@ -191,5 +191,5 @@ if __name__ == "__main__":
 
     # plot feature importance
     name_features = get_feature_name()
-    plot_feature_importance(best_fold.feature_importances_,name_features,max_feature=50,show=True)
-    plot_feature_importance(related_best_fold.feature_importances_,name_features,max_feature=50,show=True)
+    plot_feature_importance(best_fold.feature_importances_,name_features,max_feature=30,show=True)
+    plot_feature_importance(related_best_fold.feature_importances_,name_features,max_feature=30,show=True)
