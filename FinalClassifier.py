@@ -1,6 +1,7 @@
 import sys
 import numpy as np
-
+import os
+import joblib
 from sklearn.ensemble import GradientBoostingClassifier
 from feature_engineering import refuting_features, polarity_features, hand_features, sentiment_analyzer, gen_or_load_feats
 from feature_engineering import word_overlap_features, name_entity_similarity, question_mark_ending, doc2vec_feature
@@ -159,6 +160,10 @@ def evaluate_model(best_fold,related_best_fold,X_holdout,y_holdout,y_holdout_bi)
     print("")
     print("")
 
+def generate_model(fold_stance,step):
+    best_fold = generate_k_fold_model(fold_stances,step=step)
+    joblib.dump(best_fold, "models/finalClassifier." + str(step) + ".model")
+
 if __name__ == "__main__":
     check_version()
     parse_params()
@@ -173,7 +178,9 @@ if __name__ == "__main__":
     # step1 : classification model for related or unrelated
     folds,hold_out = kfold_split(d,n_folds=10)
     fold_stances, hold_out_stances = get_stances_for_folds(d,folds,hold_out)
-    best_fold = generate_k_fold_model(fold_stances,step=1)
+    if not os.path.isfile("models/finalClassifier.1.model"):
+        generate_model(fold_stances,1)
+    best_fold = joblib.load("models/finalClassifier.1.model")
 
     # Load/Precompute all features now
     X_holdout,y_holdout,y_holdout_bi = generate_features(hold_out_stances,d,"holdout")
@@ -181,7 +188,9 @@ if __name__ == "__main__":
     # step2 : classification model for related (3 classes : Agree, Disagree, Discuss)
     related_folds, related_hold_out = kfold_split(d,n_folds=10,biClass=True)
     related_fold_stances, related_hold_out_stances = get_stances_for_folds(d,related_folds,related_hold_out,only_related=True)
-    related_best_fold = generate_k_fold_model(related_fold_stances,step=2)
+    if not os.path.isfile("models/finalClassifier.2.model"):
+        generate_model(fold_stances,2)
+    related_best_fold = joblib.load("models/finalClassifier.2.model")
 
     #Run on Holdout set and report the final score on the holdout set
     evaluate_model(best_fold,related_best_fold,X_holdout,y_holdout,y_holdout_bi)

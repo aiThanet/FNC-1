@@ -1,6 +1,7 @@
 import sys
 import numpy as np
-
+import os
+import joblib
 from sklearn.ensemble import GradientBoostingClassifier
 from feature_engineering import refuting_features, polarity_features, hand_features, sentiment_analyzer, gen_or_load_feats
 from feature_engineering import word_overlap_features, name_entity_similarity, question_mark_ending, doc2vec_feature
@@ -88,24 +89,10 @@ def get_feature_name():
     
     return name_features
 
-if __name__ == "__main__":
-    check_version()
-    parse_params()
-
-    #Load the training dataset and generate folds
-    d = DataSet()
-    folds,hold_out = kfold_split(d,n_folds=10)
-    fold_stances, hold_out_stances = get_stances_for_folds(d,folds,hold_out)
-
-    # Load the competition dataset
-    competition_dataset = DataSet("competition_test")
-    X_competition, y_competition = generate_features(competition_dataset.stances, competition_dataset, "competition")
-
+def generate_model(fold_stances):
     Xs = dict()
     ys = dict()
 
-    # Load/Precompute all features now
-    X_holdout,y_holdout = generate_features(hold_out_stances,d,"holdout")
     for fold in fold_stances:
         Xs[fold],ys[fold] = generate_features(fold_stances[fold],d,str(fold))
 
@@ -142,8 +129,28 @@ if __name__ == "__main__":
         if score > best_score:
             best_score = score
             best_fold = clf
+    
+    joblib.dump(best_fold, "models/xgboost.model")
 
+if __name__ == "__main__":
+    check_version()
+    parse_params()
 
+    #Load the training dataset and generate folds
+    d = DataSet()
+    folds,hold_out = kfold_split(d,n_folds=10)
+    fold_stances, hold_out_stances = get_stances_for_folds(d,folds,hold_out)
+
+    # Load the competition dataset
+    competition_dataset = DataSet("competition_test")
+    X_competition, y_competition = generate_features(competition_dataset.stances, competition_dataset, "competition")
+
+    # Load/Precompute all features now
+    X_holdout,y_holdout = generate_features(hold_out_stances,d,"holdout")
+
+    if not os.path.isfile("models/xgboost.model"):
+        generate_model(fold_stances)
+    best_fold = joblib.load("models/xgboost.model")
 
     #Run on Holdout set and report the final score on the holdout set
     predicted = [LABELS[int(a)] for a in best_fold.predict(X_holdout)]

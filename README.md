@@ -24,13 +24,15 @@ This project start from provided baseline on [github](https://github.com/FakeNew
 
         java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9020
 
-5.  To generate doc2vec feature, you need 2 paragraph vector models in models directory name `h_d2v.model` and `b_d2v.model`. You can generate from doc2vecModelGenerator.py or download `models.zip` from [drive](https://drive.google.com/drive/folders/1dUrKZuVctHLy1PBvCRV3pZPbE5iFZL7i?usp=sharing).
+5.  To generate doc2vec feature, you need 2 paragraph vector models in models directory name `h_d2v.model` and `b_d2v.model`. You can generate from doc2vecModelGenerator.py or use the one we've already generated.
 
-6.  To run and generate the model (if features does not exist, automatically generate and save in features directory).
+6.  In order to reproduce the same results, please use our features and download the models from [model.zip]() and unzip them into `models` directory.
+
+7.  To run and generate the model (if features does not exist, automatically generate and save in features directory).
 
         python3 FinalClassifier.py
 
-7.  `XGBoostClassifier.py` is the old version of project which classify 4 classes by only one model.
+8.  `XGBoostClassifier.py` is the old version of project which classify 4 classes by only a XGBoost model.
 
 ## References
 
