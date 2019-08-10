@@ -28,9 +28,9 @@ This project start from provided baseline on [github](https://github.com/FakeNew
 
 6.  To run and generate the model (if features does not exist, automatically generate and save in features directory).
 
-        python3 test_2_models.py
+        python3 FinalClassifier.py
 
-7.  `test_model.py` is the old version of project which classify 4 classes by only one model.
+7.  `XGBoostClassifier.py` is the old version of project which classify 4 classes by only one model.
 
 ## References
 
