@@ -32,6 +32,10 @@ This project start from provided baseline on [github](https://github.com/FakeNew
 
 7.  `XGBoostClassifier.py` is the old version of project which classify 4 classes by only a XGBoost model.
 
+## Report
+[Report](report.pdf).
+
+
 ## References
 
 - [FakeNewsChallenge.org](http://fakenewschallenge.org).
